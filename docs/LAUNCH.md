@@ -28,39 +28,41 @@ working until step 4.
 
 ## 3. Point the domain at GitHub Pages
 
-Still at Squarespace for now.
+`mlawapalsa.com`'s DNS is run by **U-M ITS** (nameservers `dns*.itd.umich.edu` /
+`dns*.umich.org`), not Squarespace, so record changes go through an ITS request.
 
-1. **Verify the domain for the organization** (prevents someone else from claiming it): GitHub
-   organization **Settings → Pages → Add a domain** → `mlawapalsa.com`, then add the TXT record
-   it gives you in Squarespace's DNS settings.
-2. In Squarespace **Domains → mlawapalsa.com → DNS**, remove the Squarespace defaults and add:
+1. In the repository: **Settings → Pages → Custom domain** is set to `www.mlawapalsa.com`
+   (done 2026-10-17). Do this _before_ changing DNS so nobody else can claim the domain.
+2. **Verify the domain for the organization** (prevents someone else from claiming it): GitHub
+   organization **Settings → Pages → Add a domain** → `mlawapalsa.com`. Copy the TXT record it
+   shows; don't click **Verify** until ITS has added it.
+3. Ask U-M ITS to replace the existing Squarespace records with:
 
-   | Type  | Host  | Value                          |
-   | ----- | ----- | ------------------------------ |
-   | A     | `@`   | `185.199.108.153`              |
-   | A     | `@`   | `185.199.109.153`              |
-   | A     | `@`   | `185.199.110.153`              |
-   | A     | `@`   | `185.199.111.153`              |
-   | CNAME | `www` | `mlaw-apalsa-eboard.github.io` |
+   | Type  | Name                                                        | Value                          |
+   | ----- | ----------------------------------------------------------- | ------------------------------ |
+   | A     | `mlawapalsa.com`                                            | `185.199.108.153`              |
+   | A     | `mlawapalsa.com`                                            | `185.199.109.153`              |
+   | A     | `mlawapalsa.com`                                            | `185.199.110.153`              |
+   | A     | `mlawapalsa.com`                                            | `185.199.111.153`              |
+   | AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8000::153`          |
+   | AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8001::153`          |
+   | AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8002::153`          |
+   | AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8003::153`          |
+   | CNAME | `www.mlawapalsa.com`                                        | `mlaw-apalsa-eboard.github.io` |
+   | TXT   | `_github-pages-challenge-mlaw-apalsa-eboard.mlawapalsa.com` | _(value from step 2)_          |
 
-3. In the repository: **Settings → Pages → Custom domain** → `www.mlawapalsa.com` → **Save**.
-   Wait for the DNS check to pass (minutes to a few hours), then tick **Enforce HTTPS**.
-4. Visit <https://www.mlawapalsa.com> and <https://mlawapalsa.com> and click through every page.
+   The `www` name currently has A records; those must be removed for the CNAME to work.
 
-## 4. Move the domain to Cloudflare and cancel Squarespace
+4. Once ITS confirms, click **Verify** on the organization's domain page. In the repository's
+   **Settings → Pages**, wait for the DNS check to pass (minutes to a few hours), then tick
+   **Enforce HTTPS**.
+5. Visit <https://www.mlawapalsa.com> and <https://mlawapalsa.com> and click through every page.
 
-1. Check when the Squarespace plan and domain renew so you don't pay for an extra year.
-2. Create a **Cloudflare** account under the shared board email and add `mlawapalsa.com`.
-   Re-create the DNS records from step 3 (set the CNAME and A records to **DNS only**, the grey
-   cloud, so GitHub can issue the HTTPS certificate).
-3. In Squarespace, unlock the domain and get the transfer (authorization) code. Start the
-   transfer in **Cloudflare → Domain Registration → Transfer Domains**.
-4. Once the transfer completes, turn on **auto-renew** and add a payment method the treasurer
-   controls.
-5. Cancel the Squarespace website subscription.
+## 4. Cancel Squarespace
 
-> Domains can't be transferred within 60 days of being registered or transferred. If Squarespace
-> says the domain is locked for that reason, finish steps 1–3 now and do step 4 later.
+1. Check when the Squarespace plan renews so you don't pay for an extra year.
+2. Once the new site is live on the domain, cancel the Squarespace website subscription. The
+   domain itself is registered outside Squarespace, so cancelling doesn't affect it.
 
 ## 5. Hand off
 

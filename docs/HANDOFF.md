@@ -1,6 +1,6 @@
 # Yearly handoff checklist
 
-The website costs about $10–11 a year (the domain) and needs very little upkeep. What keeps it
+The website costs at most about $10–11 a year (the domain) and needs very little upkeep. What keeps it
 alive is making sure **access and billing pass to the next board** every year. Do this at the
 winter board transition.
 
@@ -9,19 +9,19 @@ winter board transition.
 All accounts should be under the **shared board email** (`apalsaeboard@umich.edu`), never a
 personal email, so nothing is lost when someone graduates.
 
-| Account                                                      | What it's for                    | Handoff                                                                                                                                              |
-| ------------------------------------------------------------ | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **GitHub organization** (`mlaw-apalsa-eboard`)               | Stores the site; runs publishing | Add the incoming site manager as an **Owner**. Keep at least **two** owners at all times. Remove graduating members.                                 |
-| **Pages CMS** ([app.pagescms.org](https://app.pagescms.org)) | Web editor for content           | Invite incoming board members by email (the **Collaborators** settings for the site). Remove graduating members.                                     |
-| **Cloudflare** (domain registrar)                            | Owns `mlawapalsa.com`            | Make sure the login lives in the shared board account, auto-renew is **on**, and the card on file belongs to the current treasurer (or org account). |
-| **Google Form** (mailing list / contact)                     | Sign-ups and messages            | Owned by the shared board Google account.                                                                                                            |
+| Account                                                      | What it's for                     | Handoff                                                                                                                                                                         |
+| ------------------------------------------------------------ | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **GitHub organization** (`mlaw-apalsa-eboard`)               | Stores the site; runs publishing  | Add the incoming site manager as an **Owner**. Keep at least **two** owners at all times. Remove graduating members.                                                            |
+| **Pages CMS** ([app.pagescms.org](https://app.pagescms.org)) | Web editor for content            | Invite incoming board members by email (the **Collaborators** settings for the site). Remove graduating members.                                                                |
+| **U-M ITS** (DNS for `mlawapalsa.com`)                       | Points the domain at GitHub Pages | Registered through Tucows; expires **2027-10-09**. Confirm with ITS who the registrant and billing contact are, and that renewal is handled. Record the ITS ticket number here. |
+| **Google Form** (mailing list / contact)                     | Sign-ups and messages             | Owned by the shared board Google account.                                                                                                                                       |
 
 ## Every year
 
 - [ ] Transfer the accounts above.
 - [ ] Update the board (see [EDITING.md](EDITING.md#update-the-board-for-a-new-year)).
 - [ ] Update the fellowship eligibility years and sponsors.
-- [ ] Check the domain's renewal date in Cloudflare and confirm auto-renew is on.
+- [ ] Confirm the domain is still registered and renewing (expires 2027-10-09 unless renewed): run `whois mlawapalsa.com`, or ask U-M ITS.
 - [ ] Open the site on your phone and click through every page.
 
 ## Every few months (site manager)
