@@ -8,7 +8,7 @@ photos, page text) from your browser, without touching any code.
 1. Ask a current board member who manages the site to invite you to **Pages CMS** using your
    email address. You don't need a GitHub account.
 2. Open the invitation email and sign in at **[app.pagescms.org](https://app.pagescms.org)**.
-3. Choose the **mlawapalsa** site.
+3. Choose the **mlaw-apalsa-eboard.github.io** site.
 
 The left sidebar lists everything you can edit:
 

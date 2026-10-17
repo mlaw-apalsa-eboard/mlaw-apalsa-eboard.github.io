@@ -8,18 +8,18 @@ working until step 4.
 1. Sign in to GitHub with an account under the **shared board email**. Create one if needed.
 2. Create a free **organization** (`mlaw-apalsa-eboard`): <https://github.com/organizations/plan>.
    Add at least one other board member as an **Owner**.
-3. Create a **public** repository in the organization named `mlawapalsa` and push this project
-   to its `main` branch.
+3. Create a **public** repository in the organization named `mlaw-apalsa-eboard.github.io` and
+   push this project to its `main` branch. (That exact name makes GitHub serve the site at the
+   root of `https://mlaw-apalsa-eboard.github.io/`, a free address that always works.)
 4. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 5. **Actions** tab: the **Deploy** workflow should run and finish green. The site is now live at
-   `https://mlaw-apalsa-eboard.github.io/mlawapalsa/`. Pages will look unstyled at that address because
-   the site expects to be served from the root of a domain; that's fixed by step 3.
+   <https://mlaw-apalsa-eboard.github.io/>.
 
 ## 2. Pages CMS
 
 1. Go to [app.pagescms.org](https://app.pagescms.org) and sign in with the board GitHub account.
-2. Install the Pages CMS GitHub App on the organization and grant it the `mlawapalsa`
-   repository.
+2. Install the Pages CMS GitHub App on the organization and grant it the
+   `mlaw-apalsa-eboard.github.io` repository.
 3. Open the repository. The editor sidebar should list Board members, Events, Pages, and Site
    settings.
 4. Invite board members by email from the site's **Collaborators** settings.
@@ -31,8 +31,12 @@ working until step 4.
 `mlawapalsa.com`'s DNS is run by **U-M ITS** (nameservers `dns*.itd.umich.edu` /
 `dns*.umich.org`), not Squarespace, so record changes go through an ITS request.
 
-1. In the repository: **Settings → Pages → Custom domain** is set to `www.mlawapalsa.com`
-   (done 2026-10-17). Do this _before_ changing DNS so nobody else can claim the domain.
+1. In the repository: **Settings → Pages → Custom domain** → `www.mlawapalsa.com` → **Save**.
+   Do this _before_ or right when ITS changes DNS, so nobody else can claim the domain and
+   `www.mlawapalsa.com` doesn't show a GitHub error. (It was attached on 2026-10-17, then
+   detached the same day so `https://mlaw-apalsa-eboard.github.io/` could be shared for review
+   while waiting on ITS. **Re-attach it when ITS confirms.** Once attached, the github.io address
+   redirects to `www.mlawapalsa.com`.)
 2. **Verify the domain for the organization** (prevents someone else from claiming it): GitHub
    organization **Settings → Pages → Add a domain** → `mlawapalsa.com`. Copy the TXT record it
    shows; don't click **Verify** until ITS has added it.
