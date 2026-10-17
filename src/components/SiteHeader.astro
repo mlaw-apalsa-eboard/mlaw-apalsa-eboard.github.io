@@ -16,7 +16,7 @@ const { pathname } = Astro.url;
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="/">
-      <Image src={logo} alt="" width={56} height={56} loading="eager" />
+      <Image src={logo} alt="" width={48} height={48} densities={[1, 2, 3]} loading="eager" />
       <span class="brand-text">
         <span class="brand-name">{shortName}</span>
         <span class="brand-sub">{name}</span>
