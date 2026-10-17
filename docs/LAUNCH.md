@@ -6,13 +6,13 @@ working until step 4.
 ## 1. GitHub
 
 1. Sign in to GitHub with an account under the **shared board email**. Create one if needed.
-2. Create a free **organization** (e.g. `mlaw-apalsa`): <https://github.com/organizations/plan>.
+2. Create a free **organization** (`mlaw-apalsa-eboard`): <https://github.com/organizations/plan>.
    Add at least one other board member as an **Owner**.
 3. Create a **public** repository in the organization named `mlawapalsa` and push this project
    to its `main` branch.
 4. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
 5. **Actions** tab: the **Deploy** workflow should run and finish green. The site is now live at
-   `https://mlaw-apalsa.github.io/mlawapalsa/`. Pages will look unstyled at that address because
+   `https://mlaw-apalsa-eboard.github.io/mlawapalsa/`. Pages will look unstyled at that address because
    the site expects to be served from the root of a domain; that's fixed by step 3.
 
 ## 2. Pages CMS
@@ -35,13 +35,13 @@ Still at Squarespace for now.
    it gives you in Squarespace's DNS settings.
 2. In Squarespace **Domains → mlawapalsa.com → DNS**, remove the Squarespace defaults and add:
 
-   | Type  | Host  | Value                   |
-   | ----- | ----- | ----------------------- |
-   | A     | `@`   | `185.199.108.153`       |
-   | A     | `@`   | `185.199.109.153`       |
-   | A     | `@`   | `185.199.110.153`       |
-   | A     | `@`   | `185.199.111.153`       |
-   | CNAME | `www` | `mlaw-apalsa.github.io` |
+   | Type  | Host  | Value                          |
+   | ----- | ----- | ------------------------------ |
+   | A     | `@`   | `185.199.108.153`              |
+   | A     | `@`   | `185.199.109.153`              |
+   | A     | `@`   | `185.199.110.153`              |
+   | A     | `@`   | `185.199.111.153`              |
+   | CNAME | `www` | `mlaw-apalsa-eboard.github.io` |
 
 3. In the repository: **Settings → Pages → Custom domain** → `www.mlawapalsa.com` → **Save**.
    Wait for the DNS check to pass (minutes to a few hours), then tick **Enforce HTTPS**.
