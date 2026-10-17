@@ -1,5 +1,5 @@
 ---
-title: Our Mission (hi)
+title: Our Mission
 description: APALSA advocates for the Asian Pacific American community at
   Michigan Law, provides academic and professional resources for our members,
   and connects students and alumni.
