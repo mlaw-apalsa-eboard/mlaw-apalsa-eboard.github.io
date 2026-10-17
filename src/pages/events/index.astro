@@ -1,0 +1,51 @@
+---
+import EventCard from '@/components/EventCard.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import UpcomingEvents from '@/components/UpcomingEvents.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPage, getSettings } from '@/lib/content';
+import { getEvents } from '@/lib/events';
+
+const { title, description, Content } = await getPage('events');
+const settings = await getSettings();
+const { upcoming, past } = await getEvents();
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title}>
+    <div class="lede">
+      <Content />
+    </div>
+  </PageHeader>
+
+  <section class="section" aria-labelledby="upcoming">
+    <div class="container">
+      <h2 id="upcoming" class="section-heading">
+        Upcoming
+      </h2>
+      <UpcomingEvents events={upcoming} instagram={settings.instagram} />
+    </div>
+  </section>
+
+  {past.length > 0 && (
+    <section class="section section-soft" aria-labelledby="past">
+      <div class="container">
+        <h2 id="past" class="section-heading">
+          Past events
+        </h2>
+        <div class="event-list">
+          {past.map((event) => (
+            <EventCard event={event} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .event-list {
+    display: grid;
+    gap: var(--space-s);
+  }
+</style>

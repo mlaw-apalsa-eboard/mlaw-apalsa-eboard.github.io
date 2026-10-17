@@ -1,0 +1,108 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Icon from '@/components/Icon.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { formatRange } from '@/lib/datetime';
+import { googleCalendarUrl, type EventEntry } from '@/lib/events';
+
+export const getStaticPaths = (async () => {
+  const events = await getCollection('events');
+  return events.map((event) => ({ params: { id: event.id }, props: { event } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  event: EventEntry;
+}
+
+const { event } = Astro.props;
+const { title, start, end, location } = event.data;
+const { Content } = await render(event);
+const when = formatRange(start, end);
+const description = `${when}${location ? ` · ${location}` : ''}`;
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title} eyebrow="Event">
+    <ul class="meta" role="list">
+      <li>
+        <Icon name="clock" />
+        <span>{when}</span>
+      </li>
+      {location && (
+        <li>
+          <Icon name="pin" />
+          <span>{location}</span>
+        </li>
+      )}
+    </ul>
+  </PageHeader>
+  <section class="section">
+    <div class="container-narrow">
+      {event.body?.trim() && (
+        <div class="prose">
+          <Content />
+        </div>
+      )}
+      <div class="actions">
+        <a class="button button-secondary" href={googleCalendarUrl(event)} rel="noopener">
+          <Icon name="calendar" />
+          Add to Google Calendar
+        </a>
+        <a class="button button-outline" href={`/events/${event.id}.ics`} download>
+          <Icon name="download" />
+          Download .ics
+        </a>
+      </div>
+      <p class="back">
+        <a href="/events/">
+          <Icon name="arrowLeft" /> All events
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .meta {
+    list-style: none;
+    margin: var(--space-s) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+    color: var(--color-muted);
+  }
+
+  .meta li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .meta :global(.icon) {
+    margin-top: 0.25em;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  .prose + .actions {
+    margin-top: var(--space-l);
+  }
+
+  .back {
+    margin-top: var(--space-l);
+  }
+
+  .back a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+  }
+</style>

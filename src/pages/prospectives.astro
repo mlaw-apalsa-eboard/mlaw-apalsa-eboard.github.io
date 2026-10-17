@@ -1,0 +1,49 @@
+---
+import PageHeader from '@/components/PageHeader.astro';
+import PhotoGrid from '@/components/PhotoGrid.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPage, getSettings } from '@/lib/content';
+
+const { title, description, photos, Content } = await getPage('prospectives');
+const settings = await getSettings();
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title} eyebrow="Students" />
+  <section class="section">
+    <div class="container-narrow">
+      <div class="prose">
+        <Content />
+      </div>
+      <div class="actions">
+        <a class="button button-secondary" href={`mailto:${settings.email}`}>
+          Email the board
+        </a>
+        {settings.mailingList && (
+          <a class="button button-outline" href={settings.mailingList} rel="noopener">
+            Join our mailing list
+          </a>
+        )}
+      </div>
+    </div>
+    {photos.length > 0 && (
+      <div class="container photos">
+        <h2 class="visually-hidden">Photos</h2>
+        <PhotoGrid photos={photos} />
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  .photos {
+    margin-top: var(--space-xl);
+  }
+</style>

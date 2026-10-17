@@ -1,0 +1,86 @@
+---
+import PageHeader from '@/components/PageHeader.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPage } from '@/lib/content';
+
+const { title, description, headings, Content } = await getPage('constitution');
+const articles = headings.filter((heading) => heading.depth === 2);
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title} eyebrow="About" />
+  <section class="section">
+    <div class="container layout">
+      {articles.length > 0 && (
+        <nav class="toc" aria-labelledby="toc-heading">
+          <h2 id="toc-heading" class="eyebrow">
+            Contents
+          </h2>
+          <ol role="list">
+            {articles.map((article) => (
+              <li>
+                <a href={`#${article.slug}`}>{article.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
+      <article class="prose">
+        <Content />
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .layout {
+    display: grid;
+    gap: var(--space-l);
+    align-items: start;
+  }
+
+  @media (min-width: 60rem) {
+    .layout {
+      grid-template-columns: 17rem minmax(0, 46rem);
+      justify-content: center;
+    }
+
+    .toc {
+      position: sticky;
+      top: 6rem;
+    }
+  }
+
+  .toc {
+    padding: var(--space-m);
+    background: var(--color-bg-soft);
+    border-radius: var(--radius);
+  }
+
+  .toc h2 {
+    margin-bottom: var(--space-xs);
+  }
+
+  .toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.925rem;
+  }
+
+  .toc a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: var(--color-blue-700);
+    text-decoration: underline;
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+</style>

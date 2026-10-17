@@ -1,0 +1,16 @@
+# Opens a monthly pull request to keep dependencies up to date.
+# CI runs on each one; merge it if the checks pass.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      all-dependencies:
+        patterns: ['*']
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

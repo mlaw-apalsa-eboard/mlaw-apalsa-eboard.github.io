@@ -1,0 +1,110 @@
+---
+import Icon from '@/components/Icon.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPage, getSettings } from '@/lib/content';
+
+const { title, description, Content } = await getPage('contact');
+const settings = await getSettings();
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  settings.address.join(', '),
+)}`;
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title}>
+    <div class="lede">
+      <Content />
+    </div>
+  </PageHeader>
+  <section class="section">
+    <div class="container cards">
+      <div class="card">
+        <Icon name="mail" class="icon card-icon" />
+        <h2>Email</h2>
+        <p>
+          <a href={`mailto:${settings.email}`}>{settings.email}</a>
+        </p>
+        {settings.contactForm && (
+          <p>
+            <a class="button button-secondary" href={settings.contactForm} rel="noopener">
+              Send us a message
+            </a>
+          </p>
+        )}
+      </div>
+      <div class="card">
+        <Icon name="instagram" class="icon card-icon" />
+        <h2>Social</h2>
+        <p>
+          <a href={settings.instagram} rel="noopener">
+            Follow us on Instagram
+          </a>
+        </p>
+        {settings.mailingList && (
+          <p>
+            <a href={settings.mailingList} rel="noopener">
+              Join our mailing list
+            </a>
+          </p>
+        )}
+      </div>
+      <div class="card">
+        <Icon name="pin" class="icon card-icon" />
+        <h2>Our office</h2>
+        <address>
+          APALSA
+          {settings.address.map((line) => (
+            <span>{line}</span>
+          ))}
+        </address>
+        <p>
+          <a href={mapsUrl} rel="noopener">
+            Open in Google Maps
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .cards {
+    display: grid;
+    gap: var(--space-m);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: var(--space-l) var(--space-m);
+    background: var(--color-bg-soft);
+    border-radius: var(--radius);
+  }
+
+  .card :global(.card-icon) {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.5rem;
+    box-sizing: content-box;
+    border-radius: 50%;
+    background: var(--color-blue);
+    color: var(--color-maize);
+  }
+
+  h2 {
+    font-size: var(--step-1);
+  }
+
+  address {
+    display: flex;
+    flex-direction: column;
+    font-style: normal;
+  }
+
+  a {
+    overflow-wrap: anywhere;
+  }
+</style>

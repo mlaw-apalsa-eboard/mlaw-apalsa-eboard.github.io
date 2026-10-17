@@ -1,0 +1,85 @@
+---
+import PageHeader from '@/components/PageHeader.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPage } from '@/lib/content';
+
+const { title, description, recipients, Content } = await getPage('fellowship');
+const byYear = [...recipients].sort((a, b) => b.year - a.year);
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title} eyebrow="Students" />
+  <section class="section">
+    <div class="container-narrow prose">
+      <Content />
+    </div>
+  </section>
+
+  {byYear.length > 0 && (
+    <section class="section section-soft" aria-labelledby="recipients">
+      <div class="container">
+        <h2 id="recipients" class="section-heading">
+          Previous fellowship recipients
+        </h2>
+        <div class="years">
+          {byYear.map(({ year, fellows }) => (
+            <section class="year" aria-label={String(year)}>
+              <h3>{year}</h3>
+              <ul role="list">
+                {fellows.map((fellow) => (
+                  <li>
+                    <span class="name">{fellow.name}</span>
+                    {fellow.placement && <span class="placement">{fellow.placement}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .years {
+    display: grid;
+    gap: var(--space-s);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  }
+
+  .year {
+    padding: var(--space-m);
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+  }
+
+  .year h3 {
+    font-size: var(--step-1);
+    margin-bottom: 0.5rem;
+    color: var(--color-blue);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .name {
+    font-weight: 600;
+  }
+
+  .placement {
+    font-size: 0.925rem;
+    color: var(--color-muted);
+  }
+</style>

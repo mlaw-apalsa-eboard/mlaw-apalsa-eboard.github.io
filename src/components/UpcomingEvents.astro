@@ -1,0 +1,67 @@
+---
+import type { EventEntry } from '@/lib/events';
+import EventCard from './EventCard.astro';
+
+interface Props {
+  events: EventEntry[];
+  instagram: string;
+  /** Show at most this many events. */
+  limit?: number;
+}
+
+const { events, instagram, limit = Infinity } = Astro.props;
+---
+
+<div class="upcoming" data-upcoming data-limit={Number.isFinite(limit) ? limit : undefined}>
+  <div class="event-list">
+    {events.map((event, index) => (
+      <EventCard event={event} hidden={index >= limit} />
+    ))}
+  </div>
+  <p class="empty" data-upcoming-empty hidden={events.length > 0}>
+    No events are scheduled right now. Follow us on{' '}
+    <a href={instagram} rel="noopener">
+      Instagram
+    </a>{' '}
+    for the latest announcements.
+  </p>
+</div>
+
+<script>
+  import { nowInSiteTimeZone } from '@/lib/datetime';
+
+  // The site is rebuilt daily, but if a rebuild is missed, hide events that have
+  // already ended so "Upcoming" never shows something in the past.
+  const now = nowInSiteTimeZone();
+  for (const list of document.querySelectorAll<HTMLElement>('[data-upcoming]')) {
+    const limit = Number(list.dataset.limit) || Infinity;
+    const cards = [...list.querySelectorAll<HTMLElement>('[data-event-end]')];
+    const current = cards.filter((card) => {
+      const ended = (card.dataset.eventEnd ?? '') < now;
+      if (ended) card.remove();
+      return !ended;
+    });
+    current.forEach((card, index) => (card.hidden = index >= limit));
+    const empty = list.querySelector<HTMLElement>('[data-upcoming-empty]');
+    if (empty) empty.hidden = current.length > 0;
+  }
+</script>
+
+<style>
+  .event-list {
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .event-list:empty {
+    display: none;
+  }
+
+  .empty {
+    color: var(--color-muted);
+  }
+
+  .empty[hidden] {
+    display: none;
+  }
+</style>

@@ -1,0 +1,93 @@
+---
+import PageHeader from '@/components/PageHeader.astro';
+import PhotoGrid from '@/components/PhotoGrid.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPage } from '@/lib/content';
+
+const { title, description, photos, sponsorsHeading, sponsorTiers, Content } =
+  await getPage('origins');
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title} eyebrow="Events" />
+  <section class="section">
+    <div class="container-narrow prose">
+      <Content />
+    </div>
+  </section>
+
+  {sponsorTiers.length > 0 && (
+    <section class="section section-soft" aria-labelledby="sponsors">
+      <div class="container">
+        <h2 id="sponsors" class="section-heading">
+          Our sponsors
+        </h2>
+        {sponsorsHeading && <p class="sponsors-intro">{sponsorsHeading}</p>}
+        <div class="tiers">
+          {sponsorTiers.map((tier) => (
+            <section class="tier" aria-label={`${tier.tier} sponsors`}>
+              <h3>{tier.tier}</h3>
+              <ul role="list">
+                {tier.sponsors.map((sponsor) => (
+                  <li>{sponsor}</li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {photos.length > 0 && (
+    <section class="section" aria-labelledby="photos">
+      <div class="container">
+        <h2 id="photos" class="section-heading">
+          From past banquets
+        </h2>
+        <PhotoGrid photos={photos} />
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .sponsors-intro {
+    margin-bottom: var(--space-m);
+    color: var(--color-muted);
+  }
+
+  .tiers {
+    display: grid;
+    gap: var(--space-m);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+
+  .tier {
+    padding: var(--space-m);
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-top: 4px solid var(--color-maize);
+    border-radius: var(--radius);
+  }
+
+  .tier h3 {
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-blue-700);
+    margin-bottom: 0.75rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    color: var(--color-blue);
+  }
+</style>

@@ -1,0 +1,224 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '@/components/Icon.astro';
+import UpcomingEvents from '@/components/UpcomingEvents.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPage, getSettings } from '@/lib/content';
+import { getEvents } from '@/lib/events';
+
+const page = await getPage('home');
+const settings = await getSettings();
+const { upcoming } = await getEvents();
+const { Content } = page;
+---
+
+<BaseLayout title={page.title} description={page.description}>
+  <section class="hero">
+    {page.heroImage && (
+      <Image
+        class="hero-image"
+        src={page.heroImage}
+        alt={page.heroImageAlt ?? ''}
+        widths={[640, 1024, 1500]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    )}
+    <div class="container hero-content">
+      <p class="eyebrow hero-eyebrow">University of Michigan Law School</p>
+      <h1>{page.title}</h1>
+      <div class="hero-text">
+        <Content />
+      </div>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/board/">
+          Meet the board
+        </a>
+        <a class="button button-ghost-light" href="/events/">
+          Upcoming events
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {page.highlights.length > 0 && (
+    <section class="section" aria-labelledby="what-we-do">
+      <div class="container">
+        <h2 id="what-we-do" class="section-heading">
+          What we do
+        </h2>
+        <ul class="highlights" role="list">
+          {page.highlights.map((item) => (
+            <li class="highlight">
+              <h3>{item.link ? <a href={item.link}>{item.title}</a> : item.title}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="section section-soft" aria-labelledby="upcoming">
+    <div class="container">
+      <div class="section-top">
+        <h2 id="upcoming" class="section-heading">
+          Upcoming events
+        </h2>
+        <a class="see-all" href="/events/">
+          All events <Icon name="arrowRight" />
+        </a>
+      </div>
+      <UpcomingEvents events={upcoming} instagram={settings.instagram} limit={3} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="join">
+    <div class="container cta">
+      <div>
+        <h2 id="join" class="section-heading">
+          Thinking about Michigan Law?
+        </h2>
+        <p>
+          We host gatherings during Preview Weekends and are always happy to answer questions from
+          prospective and admitted students.
+        </p>
+      </div>
+      <div class="cta-actions">
+        <a class="button button-secondary" href="/prospectives/">
+          For prospective students
+        </a>
+        {settings.mailingList && (
+          <a class="button button-outline" href={settings.mailingList} rel="noopener">
+            Join our mailing list
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: end;
+    min-height: min(78vh, 44rem);
+    padding-block: var(--space-xl);
+    color: #fff;
+    background: var(--color-blue);
+  }
+
+  .hero-image {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Darken the photo so white text stays readable. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(to top, rgb(0 39 76 / 0.95) 0%, rgb(0 39 76 / 0.75) 45%, rgb(0 39 76 / 0.3)),
+      linear-gradient(to right, rgb(0 39 76 / 0.6), transparent 70%);
+  }
+
+  .hero-eyebrow {
+    color: var(--color-maize);
+    margin-bottom: var(--space-s);
+  }
+
+  .hero h1 {
+    color: #fff;
+    font-size: var(--step-4);
+    max-width: 18ch;
+  }
+
+  .hero-text {
+    margin-top: var(--space-m);
+    max-width: 42rem;
+    font-size: var(--step-1);
+    line-height: 1.55;
+    color: rgb(255 255 255 / 0.9);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  .highlights {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-m);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+
+  .highlight {
+    padding: var(--space-m);
+    border-top: 4px solid var(--color-maize);
+    background: var(--color-bg-soft);
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+
+  .highlight h3 {
+    font-size: var(--step-1);
+    margin-bottom: 0.5rem;
+  }
+
+  .highlight a {
+    color: inherit;
+  }
+
+  .section-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+
+  .see-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-m);
+    padding: var(--space-l);
+    border-radius: var(--radius);
+    background: var(--color-maize-soft);
+  }
+
+  .cta .section-heading {
+    margin-bottom: var(--space-xs);
+  }
+
+  .cta p {
+    max-width: 36rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+  }
+</style>

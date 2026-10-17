@@ -1,0 +1,403 @@
+# Pages CMS configuration: https://pagescms.org/docs/
+#
+# Lets board members edit the site at https://app.pagescms.org without touching code.
+# Every field here must match the schemas in `src/content.config.ts`.
+
+media:
+  - name: board
+    label: Board headshots
+    input: src/assets/uploads/board
+    output: /src/assets/uploads/board
+    categories: [image]
+    rename: safe
+  - name: photos
+    label: Photos
+    input: src/assets/uploads/photos
+    output: /src/assets/uploads/photos
+    categories: [image]
+    rename: safe
+
+settings:
+  commit:
+    # Record who made each change in the site's history.
+    identity: user
+
+components:
+  title:
+    label: Page title
+    type: string
+    required: true
+  description:
+    label: Search engine description
+    description: One or two sentences shown in Google results and link previews.
+    type: text
+    required: true
+  body:
+    label: Page text
+    type: rich-text
+    options:
+      media: false
+  photos:
+    label: Photos
+    type: object
+    list:
+      collapsible:
+        collapsed: true
+        summary: '{alt}'
+    fields:
+      - name: image
+        label: Photo
+        type: image
+        required: true
+        options:
+          media: photos
+      - name: alt
+        label: Photo description (for screen readers)
+        description: Briefly describe what's in the photo, e.g. "The 2026 board at the Origins Banquet".
+        type: string
+        required: true
+      - name: caption
+        label: Caption (optional)
+        type: text
+
+content:
+  - name: board
+    label: Board members
+    type: collection
+    path: src/content/board
+    format: yaml
+    filename: '{name}.yml'
+    view:
+      fields: [name, role]
+      primary: name
+      sort: [role, name]
+    fields:
+      - name: name
+        label: Name
+        type: string
+        required: true
+      - name: role
+        label: Position
+        description: Members are listed on the Board page in this order of position.
+        type: select
+        required: true
+        options:
+          # Keep in sync with BOARD_ROLES in src/lib/board.ts
+          values:
+            - President
+            - Co-President
+            - Vice President
+            - Secretary
+            - Treasurer
+            - Internal Relations Chair
+            - External Relations Chair
+            - Private Practice Chair
+            - Public Interest Chair
+            - Political Action Chair
+            - Development Chair
+            - Social Chair
+            - 3L Representative
+            - 2L Representative
+            - 1L Representative
+      - name: photo
+        label: Headshot
+        description: A square photo works best.
+        type: image
+        options:
+          media: board
+      - name: bio
+        label: Bio
+        type: text
+        required: true
+
+  - name: events
+    label: Events
+    type: collection
+    path: src/content/events
+    format: yaml-frontmatter
+    filename: '{year}-{month}-{primary}.md'
+    view:
+      fields: [title, start]
+      primary: title
+      sort: [start, title]
+      default:
+        sort: start
+        order: desc
+    fields:
+      - name: title
+        label: Event name
+        type: string
+        required: true
+      - name: start
+        label: Starts
+        description: Ann Arbor time.
+        type: date
+        required: true
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
+      - name: end
+        label: Ends (optional)
+        type: date
+        default: ''
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm
+      - name: location
+        label: Location (optional)
+        type: string
+      - name: body
+        label: Description
+        type: rich-text
+        options:
+          media: false
+
+  - name: pages
+    label: Pages
+    type: group
+    items:
+      - name: home
+        label: Home
+        type: file
+        path: src/content/pages/home.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: heroImage
+            label: Banner photo
+            type: image
+            options:
+              media: photos
+          - name: heroImageAlt
+            label: Banner photo description (for screen readers)
+            type: string
+          - name: highlights
+            label: '"What we do" cards'
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{title}'
+            fields:
+              - name: title
+                label: Title
+                type: string
+                required: true
+              - name: text
+                label: Text
+                type: text
+                required: true
+              - name: link
+                label: Link (optional)
+                description: A page on this site, e.g. /fellowship
+                type: string
+          - name: body
+            label: Introduction
+            type: rich-text
+            options:
+              media: false
+
+      - name: mission
+        label: Mission
+        type: file
+        path: src/content/pages/mission.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: body
+            component: body
+          - name: photos
+            component: photos
+
+      - name: board-page
+        label: Board (intro text)
+        type: file
+        path: src/content/pages/board.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: body
+            component: body
+
+      - name: constitution
+        label: Constitution
+        type: file
+        path: src/content/pages/constitution.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: body
+            component: body
+
+      - name: prospectives
+        label: Prospective Students
+        type: file
+        path: src/content/pages/prospectives.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: body
+            component: body
+          - name: photos
+            component: photos
+
+      - name: fellowship
+        label: Fellowship
+        type: file
+        path: src/content/pages/fellowship.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: body
+            component: body
+          - name: recipients
+            label: Past recipients
+            description: Add new years at the top.
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{year}'
+            fields:
+              - name: year
+                label: Year
+                type: number
+                required: true
+              - name: fellows
+                label: Fellows
+                type: object
+                list: true
+                fields:
+                  - name: name
+                    label: Name
+                    type: string
+                    required: true
+                  - name: placement
+                    label: Organization (optional)
+                    type: string
+
+      - name: events-page
+        label: Events (intro text)
+        type: file
+        path: src/content/pages/events.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: body
+            component: body
+
+      - name: origins
+        label: Origins Banquet
+        type: file
+        path: src/content/pages/origins.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: body
+            component: body
+          - name: sponsorsHeading
+            label: Sponsors thank-you line
+            type: string
+          - name: sponsorTiers
+            label: Sponsors
+            type: object
+            list:
+              collapsible:
+                collapsed: false
+                summary: '{tier}'
+            fields:
+              - name: tier
+                label: Level (e.g. Gold, Silver)
+                type: string
+                required: true
+              - name: sponsors
+                label: Sponsors
+                type: string
+                list: true
+          - name: photos
+            component: photos
+
+      - name: contact
+        label: Contact
+        type: file
+        path: src/content/pages/contact.md
+        format: yaml-frontmatter
+        operations: { delete: false }
+        fields:
+          - name: title
+            component: title
+          - name: description
+            component: description
+          - name: body
+            component: body
+
+  - name: settings
+    label: Site settings
+    type: file
+    path: src/content/settings/site.yml
+    format: yaml
+    operations: { delete: false }
+    fields:
+      - name: name
+        label: Organization name
+        type: string
+        required: true
+      - name: shortName
+        label: Short name (shown in the header)
+        type: string
+        required: true
+      - name: description
+        label: Organization description
+        type: text
+        required: true
+      - name: email
+        label: Board email
+        type: string
+        required: true
+      - name: instagram
+        label: Instagram link
+        type: string
+        required: true
+      - name: mailingList
+        label: Mailing list sign-up link (optional)
+        type: string
+      - name: contactForm
+        label: Contact form link (optional)
+        description: e.g. a Google Form. Adds a "Send us a message" button to the Contact page.
+        type: string
+      - name: address
+        label: Office address (one line per entry)
+        type: string
+        list: true

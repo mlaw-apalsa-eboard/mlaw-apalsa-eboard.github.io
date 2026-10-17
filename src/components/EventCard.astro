@@ -1,0 +1,139 @@
+---
+import type { EventEntry } from '@/lib/events';
+import { formatDay, formatMonth, formatRange } from '@/lib/datetime';
+import Icon from './Icon.astro';
+
+interface Props {
+  event: EventEntry;
+  /** Heading level, so the card fits the page outline. */
+  headingLevel?: 2 | 3;
+  hidden?: boolean;
+}
+
+const { event, headingLevel = 3, hidden = false } = Astro.props;
+const { title, start, end, location } = event.data;
+const Heading = `h${headingLevel}` as const;
+// First paragraph of the description, without Markdown link/emphasis syntax.
+const summary = event.body
+  ?.trim()
+  .split(/\n\s*\n/)[0]
+  ?.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  .replace(/[*_]{1,2}([^*_]+)[*_]{1,2}/g, '$1');
+---
+
+<article class="event" data-event-end={end ?? start} hidden={hidden}>
+  <div class="date" aria-hidden="true">
+    <span class="month">{formatMonth(start)}</span>
+    <span class="day">{formatDay(start)}</span>
+  </div>
+  <div class="details">
+    <Heading class="title">
+      <a href={`/events/${event.id}/`}>{title}</a>
+    </Heading>
+    <p class="meta">
+      <Icon name="clock" />
+      <span>{formatRange(start, end)}</span>
+    </p>
+    {location && (
+      <p class="meta">
+        <Icon name="pin" />
+        <span>{location}</span>
+      </p>
+    )}
+    {summary && <p class="summary">{summary}</p>}
+  </div>
+</article>
+
+<style>
+  .event {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-m);
+    padding: var(--space-m);
+    background: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    transition: box-shadow 150ms ease;
+  }
+
+  .event[hidden] {
+    display: none;
+  }
+
+  .event:hover {
+    box-shadow: var(--shadow);
+  }
+
+  .date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 4.25rem;
+    height: 4.5rem;
+    border-radius: 0.6rem;
+    background: var(--color-blue);
+    color: #fff;
+    line-height: 1;
+  }
+
+  .month {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-maize);
+  }
+
+  .day {
+    margin-top: 0.25rem;
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+
+  .title {
+    font-size: var(--step-1);
+    margin-bottom: 0.4rem;
+  }
+
+  .title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Make the whole card clickable while keeping a single link for screen readers. */
+  .title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+  }
+
+  .title a:focus-visible {
+    outline: none;
+  }
+
+  .title a:focus-visible::after {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  .meta {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  .meta :global(.icon) {
+    margin-top: 0.2em;
+  }
+
+  .summary {
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+  }
+</style>

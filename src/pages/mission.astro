@@ -1,0 +1,28 @@
+---
+import PageHeader from '@/components/PageHeader.astro';
+import PhotoGrid from '@/components/PhotoGrid.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPage } from '@/lib/content';
+
+const { title, description, photos, Content } = await getPage('mission');
+---
+
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title} eyebrow="About" />
+  <section class="section">
+    <div class="container-narrow prose">
+      <Content />
+    </div>
+    {photos.length > 0 && (
+      <div class="container-narrow photos">
+        <PhotoGrid photos={photos} />
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .photos {
+    margin-top: var(--space-l);
+  }
+</style>

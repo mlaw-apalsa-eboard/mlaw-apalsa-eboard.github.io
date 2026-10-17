@@ -1,0 +1,81 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/source-serif-4';
+import '@/styles/global.css';
+import { getSettings } from '@/lib/content';
+import SiteFooter from '@/components/SiteFooter.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
+
+interface Props {
+  /** Page title; the site name is appended automatically. */
+  title: string;
+  /** Summary for search results and link previews. */
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const settings = await getSettings();
+
+const fullTitle = title === settings.name ? title : `${title} | ${settings.shortName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL('/social-card.png', Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#00274c" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={settings.shortName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content={`${settings.shortName} logo`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <SiteHeader name={settings.name} shortName={settings.shortName} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter settings={settings} />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--color-blue);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  main:focus {
+    outline: none;
+  }
+</style>
