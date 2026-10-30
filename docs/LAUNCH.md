@@ -1,7 +1,7 @@
 # Launch checklist (one-time setup)
 
-Steps to move mlawapalsa.com from Squarespace to this site. Do them in order; the old site keeps
-working until step 4.
+How mlawapalsa.com moved from Squarespace to this site. Steps 1–3 are done; this guide is kept
+as a record and in case any of it has to be redone.
 
 ## 1. GitHub
 
@@ -29,38 +29,38 @@ working until step 4.
 ## 3. Point the domain at GitHub Pages
 
 `mlawapalsa.com`'s DNS is run by **U-M ITS** (nameservers `dns*.itd.umich.edu` /
-`dns*.umich.org`), not Squarespace, so record changes go through an ITS request.
+`dns*.umich.org`), not Squarespace, so record changes go through an ITS request. This was
+completed on 2026-10-30 with these records:
+
+| Type  | Name                                                        | Value                          |
+| ----- | ----------------------------------------------------------- | ------------------------------ |
+| A     | `mlawapalsa.com`                                            | `185.199.108.153`              |
+| A     | `mlawapalsa.com`                                            | `185.199.109.153`              |
+| A     | `mlawapalsa.com`                                            | `185.199.110.153`              |
+| A     | `mlawapalsa.com`                                            | `185.199.111.153`              |
+| AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8000::153`          |
+| AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8001::153`          |
+| AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8002::153`          |
+| AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8003::153`          |
+| CNAME | `www.mlawapalsa.com`                                        | `mlaw-apalsa-eboard.github.io` |
+| TXT   | `_github-pages-challenge-mlaw-apalsa-eboard.mlawapalsa.com` | _(from GitHub, see step 2)_    |
+
+If this ever has to be set up again:
 
 1. In the repository: **Settings → Pages → Custom domain** → `www.mlawapalsa.com` → **Save**.
-   Do this _before_ or right when ITS changes DNS, so nobody else can claim the domain and
-   `www.mlawapalsa.com` doesn't show a GitHub error. (It was attached on 2026-10-17, then
-   detached the same day so `https://mlaw-apalsa-eboard.github.io/` could be shared for review
-   while waiting on ITS. **Re-attach it when ITS confirms.** Once attached, the github.io address
-   redirects to `www.mlawapalsa.com`.)
+   Do this before or right when DNS changes, so nobody else can claim the domain.
 2. **Verify the domain for the organization** (prevents someone else from claiming it): GitHub
-   organization **Settings → Pages → Add a domain** → `mlawapalsa.com`. Copy the TXT record it
-   shows; don't click **Verify** until ITS has added it.
-3. Ask U-M ITS to replace the existing Squarespace records with:
+   organization **Settings → Pages → Add a domain** → `mlawapalsa.com`, then add the TXT record
+   it shows and click **Verify**.
+3. Ask U-M ITS to set the records above. The `www` CNAME must point **directly** at
+   `mlaw-apalsa-eboard.github.io`. An alias of `mlawapalsa.com` still loads the site, but GitHub
+   treats it as proxied and won't issue an HTTPS certificate.
+4. Once GitHub reports the DNS check passing, tick **Enforce HTTPS**. GitHub renews the
+   certificate automatically.
 
-   | Type  | Name                                                        | Value                          |
-   | ----- | ----------------------------------------------------------- | ------------------------------ |
-   | A     | `mlawapalsa.com`                                            | `185.199.108.153`              |
-   | A     | `mlawapalsa.com`                                            | `185.199.109.153`              |
-   | A     | `mlawapalsa.com`                                            | `185.199.110.153`              |
-   | A     | `mlawapalsa.com`                                            | `185.199.111.153`              |
-   | AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8000::153`          |
-   | AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8001::153`          |
-   | AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8002::153`          |
-   | AAAA  | `mlawapalsa.com`                                            | `2606:50c0:8003::153`          |
-   | CNAME | `www.mlawapalsa.com`                                        | `mlaw-apalsa-eboard.github.io` |
-   | TXT   | `_github-pages-challenge-mlaw-apalsa-eboard.mlawapalsa.com` | _(value from step 2)_          |
-
-   The `www` name currently has A records; those must be removed for the CNAME to work.
-
-4. Once ITS confirms, click **Verify** on the organization's domain page. In the repository's
-   **Settings → Pages**, wait for the DNS check to pass (minutes to a few hours), then tick
-   **Enforce HTTPS**.
-5. Visit <https://www.mlawapalsa.com> and <https://mlawapalsa.com> and click through every page.
+**If the certificate doesn't appear** after the DNS is right: remove the custom domain and add it
+back in **Settings → Pages**. GitHub only requests a certificate when the domain is saved, so a
+domain saved before DNS was correct needs this nudge. The site is down for a few seconds.
 
 ## 4. Cancel Squarespace
 
